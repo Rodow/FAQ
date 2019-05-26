@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Modifier une question {% endblock %}
+
+{% block body %}
+
+<h4>Editer la question : </h4>
+
+    <div class="card-body">
+        {{ form_start(questionForm)}} 
+        {{ form_widget(questionForm)}} 
+        <button class="btn btn-primary" type="submit">Enregistrer les modifications</button>
+        {{ form_end(questionForm)}} 
+    </div>
+</article>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Mon profil {% endblock %}
+
+{% block body %}
+
+{# formulaire de réponse dispo pour les user connectés #}
+<h4>Mise a jour du profil : </h4>
+<article>
+    <div class="card-body">
+        {{ form_start(userForm)}} 
+        {{ form_widget(userForm)}} 
+        <button class="btn btn-primary" type="submit">Enregistrer</button>
+        {{ form_end(userForm)}} 
+    </div>
+    {# <a class="m-3" style="color:red" href="{{ path('user_delete', {'id': app.user.id})}}">Supprimer mon profil</a> #}
+</article>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} show {% endblock %}
+
+{% block body %}
+<h2 class="m-3">{{ question.title }}</h2>
+
+{% if question.isActive or is_granted('ROLE_MODERATOR') %}
+    <article class="card m-3">
+        {# formulaire ROLE_MODERATOR #}
+        {% if is_granted('ROLE_MODERATOR') %}
+        <div class="card-header">
+            {% if question.isActive %}
+            <a href="{{ path('question_deactivate', {'id': question.id})}}" class="ml-3">
+                <i class="far fa-eye-slash"></i> Hide
+            </a>
+            {% else %}
+            <a href="{{ path('question_activate', {'id': question.id})}}" class="ml-3">
+                <i class="far fa-eye"></i>Show
+            </a>
+            {% endif %}
+            {# formulaire ROLE_ADMIN #}
+            {% if is_granted('ROLE_ADMIN') %}
+            <form class="d-inline" method="post" action="{{ path('question_delete', {'id': question.id}) }}"
+                onsubmit="return confirm('Etes vous sûr de vouloir supprimer cette question ?');">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+                <button class="btn" style="color:red"><i class="fas fa-times-circle"></i> Delete</button>
+            </form>
+            <a href="{{ path('question_edit', {'id': question.id})}}" class="ml-3">
+                <i class="fas fa-pen"></i> Edit
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# question #}
+        <div class="card-header">
+            {% for tag in question.tags %}
+            <a href="#" class="badge badge-info">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+        <div class="card-body">
+            <div class="media mt-2">
+                <img src="{{ question.user.avatar}}" class="mr-3" alt="Avatar de l'utilisateur">
+                <div class="media-body">
+                    <h5 class="mt-0">{{ question.user.username}}</h5>
+                    <h4 class="card-title">{{ question.title }}</h4>
+                    <p class="card-text">{{ question.content }}</p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+            <a href="#"><i class="fas fa-arrow-circle-up"></i></a> <span class="pl-3 pr-3">{{ question.rank }}</span> <a href="#"><i class="fas fa-arrow-circle-down"></i></a>
+            </div>
+        </div>
+    </article>
+
+    {# réponses #}
+    {% for answer in question.answers %}
+    <article class="card m-3">
+        {# formulaire de suppression et modif à afficher en fonction de l'utilisateur #}
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="card-header">
+            <form class="d-inline"method="post" action="{{ path('answer_delete', {'id': answer.id}) }}"
+                onsubmit="return confirm('Etes vous sûr de vouloir supprimer cette réponse ?');">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ answer.id) }}">
+                <button class="btn" style="color:red"><i class="fas fa-times-circle"></i></button>
+            </form>
+            <a href="{{ path('answer_edit', {'id': answer.id})}}" class="ml-3">
+            <i class="fas fa-pen"></i>
+            </a>
+        </div>
+        {% endif %}
+
+        {# Réponse #}
+        <div class="card-header">
+            <div class="media mt-2">
+                <p class="mr-3">réponse de :</p>
+                <img src="{{ answer.user.avatar}}" style="width:45px" class="mr-3" alt="Avatar de l'utilisateur">
+                <div class="media-body">
+                    <h5 class="mt-0">{{ answer.user.username}}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ answer.content }}</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a href="#"><i class="fas fa-arrow-circle-up"></i></a> <span class="pl-3 pr-3">{{ answer.rank }}</span> <a href="#"><i class="fas fa-arrow-circle-down"></i></a>
+        </div>
+    </article>
+    {% endfor %}
+
+    {# formulaire de réponse dispo pour les user connectés #}
+    {% if app.user %}
+        <h4>Répondre à la question de {{ question.user.username }} : </h4>
+        <article class="card m-3">
+            <div class="card-header">
+                <div class="media mt-2">
+                
+                    <img src="{{ question.user.avatar}}" style="width:45px" class="mr-3" alt="Avatar de l'utilisateur">
+                    <div class="media-body">
+                        <h5 class="mt-0">{{ app.user.username}}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {{ form_start(answerForm)}} 
+                {{ form_widget(answerForm)}} 
+                <button class="btn btn-primary" type="submit">Répondre</button>
+                {{ form_end(answerForm)}} 
+            </div>
+        </article>
+    {% else %}
+        <a href="{{ path('app_login')}}" class="btn btn-primary m-3">Connectez-vous pour pouvoir répondre</a>
+    {% endif %}
+{% endif %}
+{% endblock %}

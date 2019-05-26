@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Modifier une réponse {% endblock %}
+
+{% block body %}
+
+<h4>Editer la reponse : </h4>
+
+    <div class="card-body">
+        {{ form_start(answerForm)}} 
+        {{ form_widget(answerForm)}} 
+        <button class="btn btn-primary" type="submit">Enregistrer les modifications</button>
+        {{ form_end(answerForm)}} 
+    </div>
+</article>
+
+{% endblock %}

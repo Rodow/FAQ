@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Inscription {% endblock %}
+
+{% block body %}
+
+{# formulaire de réponse dispo pour les user connectés #}
+<h4>Ajouter un nouveau Tag : </h4>
+
+    <div class="card-body">
+        {{ form_start(tagForm)}} 
+        {{ form_widget(tagForm)}} 
+        <button class="btn btn-primary" type="submit">Enregistrer le nouveaux tag</button>
+        {{ form_end(tagForm)}} 
+    </div>
+</article>
+
+{% endblock %}

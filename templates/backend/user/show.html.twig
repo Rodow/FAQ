@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Tous les utilisateurs {% endblock %}
+
+{% block body %}
+<h2 class="m-3">Tous les utilisateurs (cliquer pour éditer):</h2>
+
+<section>
+    <ol>
+        {% for user in users %}
+        <li>
+            <a href="{{ path('backend_user_edit', {'id': user.id}) }}" class="link">{{ user.username }} ({{ user.email }}) => actif : {{ user.isActive }}</a>
+        </li>
+        {% endfor %}
+    </ol>
+</section>
+{% endblock %}

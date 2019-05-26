@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Mon Profil {% endblock %}
+
+{% block body %}
+
+<h2 class="m-3">
+    Bienvenue sur FAKO'Clock
+    {% if app.user %}<span style="color:blue">{{ app.user.firstname}}</span>{% endif %}
+</h2>
+
+<section class="row">
+    <div class='col'>
+        <h4>Mon profil :</h4>
+        <p>Username : {{ app.user.username }}</p>
+        <p>firstname : {{ app.user.firstname }}</p>
+        <p>lastname : {{ app.user.lastname }}</p>
+        <p>email : {{ app.user.email }}</p>
+        <p>avatar : {{ app.user.username }}</p>
+
+        <p>
+            <a class="link" href="{{ path('user_edit', {'id': app.user.id}) }}"><i class="fas fa-user-edit"></i> - Modifier mes données</a>
+        </p>
+        <p>
+            <a class="link" href="#"><i class="fas fa-user-edit"></i> - Modifier mon mot de passe</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}

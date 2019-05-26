@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Accueil {% endblock %}
+
+{% block body %}
+
+<h2 class="m-3">
+    Bienvenue sur FAKO'Clock
+    {% if app.user %}<span style="color:blue">{{ app.user.firstname}}</span>{% endif %}
+</h2>
+
+<section class="row">
+    <aside class="col-1">
+        <h4>Les tags :</h4>
+        {% for tag in tags %}
+        <a href="{{ path('tag_question', {'id': tag.id})}}" class="badge badge-info">{{ tag.name }}</a>
+        {% endfor %}
+    </aside>
+    <div class='col'>
+        <h4>Les questions :</h4>
+        {% for question in questions %}
+        {% if question.isActive or is_granted('ROLE_MODERATOR') %}
+            <article class="card m-3">
+                
+                {# formulaire ROLE_MODERATOR #}
+                {% if is_granted('ROLE_MODERATOR') %}
+                <div class="card-header">
+                    {% if question.isActive %}
+                    <a href="{{ path('question_deactivate', {'id': question.id})}}" class="ml-3">
+                        <i class="far fa-eye-slash"></i> Hide
+                    </a>
+                    {% else %}
+                    <a href="{{ path('question_activate', {'id': question.id})}}" class="ml-3">
+                        <i class="far fa-eye"></i>Show
+                    </a>
+                    {% endif %}
+                    {# formulaire ROLE_ADMIN #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <form class="d-inline" method="post" action="{{ path('question_delete', {'id': question.id}) }}"
+                        onsubmit="return confirm('Etes vous sûr de vouloir supprimer cette question ?');">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+                        <button class="btn" style="color:red"><i class="fas fa-times-circle"></i> Delete</button>
+                    </form>
+                    <a href="{{ path('question_edit', {'id': question.id})}}" class="ml-3">
+                        <i class="fas fa-pen"></i> Edit
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                
+                {# Affichage de la question #}
+                <div class="card-header">
+                    {% for tag in question.tags %}
+                    <a href="{{ path('tag_question', {'id': tag.id})}}" class="badge badge-info">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+                <div class="card-body">
+                    <div class="media mt-2">
+                        <img src="{{ question.user.avatar}}" class="mr-3" alt="Avatar de l'utilisateur">
+                        <div class="media-body">
+                            <h5 class="mt-0">{{ question.user.username}}</h5>
+                            <h4 class="card-title">{{ question.title }}</h4>
+                            <p class="card-text">{{ question.content }}</p>
+                            <a href="{{ path('question_show', {'slug' : question.slug}) }}" class="btn btn-primary">Voir les
+                                réponses ( {{ question.answers|length }} )</a>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a href="#"><i class="fas fa-arrow-circle-up"></i></a> <span
+                            class="pl-3 pr-3">{{ question.rank }}</span> <a href="#"><i
+                                class="fas fa-arrow-circle-down"></i></a>
+                    </div>
+                </div>
+            </article>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

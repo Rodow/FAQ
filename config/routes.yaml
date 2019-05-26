@@ -1,0 +1,8 @@
+# pour la deconnexion , symfo gere cela automatiquement
+# je n'ai pas besoin de creer de methode a associer , cette route delogguera automatiquement l'utilisateu
+app_logout:
+    path: /logout
+
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index

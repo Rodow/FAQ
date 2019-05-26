@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Modifier un tag {% endblock %}
+
+{% block body %}
+
+<h4>Editer le tag : </h4>
+
+    <div class="card-body">
+        {{ form_start(tagForm)}} 
+        {{ form_widget(tagForm)}} 
+        <button class="btn btn-primary" type="submit">Enregistrer les modifications</button>
+        {{ form_end(tagForm)}} 
+    </div>
+</article>
+
+{% endblock %}

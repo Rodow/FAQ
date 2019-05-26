@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} Inscription {% endblock %}
+
+{% block body %}
+
+{# formulaire de réponse dispo pour les user connectés #}
+<h4>Merci de remplir le formulaire pour vous inscrire : </h4>
+
+    <div class="card-body">
+        {{ form_start(userForm)}} 
+        {{ form_widget(userForm)}} 
+        <button class="btn btn-primary" type="submit">S'inscrire</button>
+        {{ form_end(userForm)}} 
+    </div>
+</article>
+
+{% endblock %}

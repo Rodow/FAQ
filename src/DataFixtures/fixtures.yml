@@ -1,0 +1,36 @@
+App\Entity\Tag:
+    tag_{1..10}:
+            name: '<word()>'
+
+App\Entity\Role:
+    role_{1}:
+      name: 'user'
+      code: 'ROLE_USER'
+
+App\Entity\User:
+    user_{1..10}:
+        username: 'user<current()>'
+        firstname: '<firstName()>'
+        lastname: <lastName()>
+        email: <email()>
+        password: <password()>
+        avatar: '<imageUrl(64, 64, people)>'
+        role: '@role_*'
+
+App\Entity\Answer:
+    answer_{1..50}:
+        content: '<text(150)>'
+        rank: <numberBetween(-100, 100)>
+        user: '@user_*'
+        question: '@question_*'
+
+App\Entity\Question:
+    question_{1..10}:
+        title: '<text(50)>'
+        content: '<text(150)>'
+        rank: <numberBetween(-100, 100)>
+        tags: '2x @tag_*'
+        user: '@user_*'
+        slug: '<slugify(@self->title)>'
+
+
